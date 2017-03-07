@@ -42,7 +42,6 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -61,9 +60,9 @@ public class PerfectX extends Configured implements Tool {
     public void map(LongWritable key, Text value, Context context)
         throws IOException, InterruptedException {
       List<String> tokens = Tokenizer.tokenize(value.toString());
-      List<String> X = new ArrayList();
+      List<String> X = new List();
       for (int ii = 1; ii < tokens.size(); ii++){
-	  if (tokens.get(ii - 1).equals("perfect")) {X.add(tokens.get(ii));}
+	  if (tokens.get(ii - 1) = "perfect") {X.add(tokens.get(ii))}
       }
 
       for (String word : X) {
@@ -85,9 +84,9 @@ public class PerfectX extends Configured implements Tool {
     public void map(LongWritable key, Text value, Context context)
         throws IOException, InterruptedException {
       List<String> tokens = Tokenizer.tokenize(value.toString());
-      List<String> X = new ArrayList();
+      List<String> X = new List();
       for (int ii = 1; ii < tokens.size(); ii++){
-	  if (tokens.get(ii - 1).equals("perfect")) {X.add(tokens.get(ii));}
+	  if (tokens.get(ii - 1) = "perfect") {X.add(tokens.get(ii))}
       }
 
       for (String word : X) {

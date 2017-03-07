@@ -42,14 +42,12 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Simple word count demo.
  */
-public class PerfectX extends Configured implements Tool {
-  private static final Logger LOG = Logger.getLogger(PerfectX.class);
+public class WordCount extends Configured implements Tool {
+  private static final Logger LOG = Logger.getLogger(WordCount.class);
 
   // Mapper: emits (token, 1) for every word occurrence.
   public static final class MyMapper extends Mapper<LongWritable, Text, Text, IntWritable> {
@@ -60,13 +58,7 @@ public class PerfectX extends Configured implements Tool {
     @Override
     public void map(LongWritable key, Text value, Context context)
         throws IOException, InterruptedException {
-      List<String> tokens = Tokenizer.tokenize(value.toString());
-      List<String> X = new ArrayList();
-      for (int ii = 1; ii < tokens.size(); ii++){
-	  if (tokens.get(ii - 1).equals("perfect")) {X.add(tokens.get(ii));}
-      }
-
-      for (String word : X) {
+      for (String word : Tokenizer.tokenize(value.toString())) {
         WORD.set(word);
         context.write(WORD, ONE);
       }
@@ -84,13 +76,7 @@ public class PerfectX extends Configured implements Tool {
     @Override
     public void map(LongWritable key, Text value, Context context)
         throws IOException, InterruptedException {
-      List<String> tokens = Tokenizer.tokenize(value.toString());
-      List<String> X = new ArrayList();
-      for (int ii = 1; ii < tokens.size(); ii++){
-	  if (tokens.get(ii - 1).equals("perfect")) {X.add(tokens.get(ii));}
-      }
-
-      for (String word : X) {
+      for (String word : Tokenizer.tokenize(value.toString())) {
         if (counts.containsKey(word)) {
           counts.put(word, counts.get(word)+1);
         } else {
@@ -134,7 +120,7 @@ public class PerfectX extends Configured implements Tool {
   /**
    * Creates an instance of this tool.
    */
-  private PerfectX() {}
+  private WordCount() {}
 
   private static final class Args {
     @Option(name = "-input", metaVar = "[path]", required = true, usage = "input path")
@@ -166,7 +152,7 @@ public class PerfectX extends Configured implements Tool {
       return -1;
     }
 
-    LOG.info("Tool: " + PerfectX.class.getSimpleName());
+    LOG.info("Tool: " + WordCount.class.getSimpleName());
     LOG.info(" - input path: " + args.input);
     LOG.info(" - output path: " + args.output);
     LOG.info(" - number of reducers: " + args.numReducers);
@@ -174,8 +160,8 @@ public class PerfectX extends Configured implements Tool {
 
     Configuration conf = getConf();
     Job job = Job.getInstance(conf);
-    job.setJobName(PerfectX.class.getSimpleName());
-    job.setJarByClass(PerfectX.class);
+    job.setJobName(WordCount.class.getSimpleName());
+    job.setJarByClass(WordCount.class);
 
     job.setNumReduceTasks(args.numReducers);
 
@@ -207,6 +193,6 @@ public class PerfectX extends Configured implements Tool {
    * Dispatches command-line arguments to the tool via the {@code ToolRunner}.
    */
   public static void main(String[] args) throws Exception {
-    ToolRunner.run(new PerfectX(), args);
+    ToolRunner.run(new WordCount(), args);
   }
 }
